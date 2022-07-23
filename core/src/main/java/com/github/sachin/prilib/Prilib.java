@@ -2,7 +2,10 @@ package com.github.sachin.prilib;
 
 import com.github.sachin.prilib.nms.NBTItem;
 import com.github.sachin.prilib.nms.AbstractNMSHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,13 +30,8 @@ public final class Prilib {
 
 
     public void initialize(){
-        if(!loadVersions(plugin,mcVersion)){
-            this.isNMSEnabled = false;
-            log("running incompaitable version of minecraft for the plugin: "+mcVersion);
-        }
-        else{
-            log("Running "+mcVersion+" minecraft version");
-        }
+        this.isNMSEnabled = loadVersions(plugin,mcVersion);
+        log("Running "+mcVersion+" minecraft version");
     }
 
     public Prilib(JavaPlugin plugin){
@@ -57,6 +55,10 @@ public final class Prilib {
             return false;
         }
 
+    }
+
+    public static void sendConsoleMessage(String message){
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',message));
     }
 
     public NamespacedKey getKey(String key){

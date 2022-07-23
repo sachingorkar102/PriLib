@@ -1,6 +1,9 @@
 /home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/utils/RandomUtils.java
+/home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/utils/ConfigUpdater.java
+/home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/utils/PlaceHolderAPIUtils.java
 /home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/Prilib.java
 /home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/nms/AbstractNMSHandler.java
+/home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/utils/PluginHook.java
 /home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/utils/AbstractPermManager.java
 /home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/nms/NBTItem.java
 /home/sachin/Documents/My Plugins/PriLib/core/src/main/java/com/github/sachin/prilib/utils/ItemUtils.java
