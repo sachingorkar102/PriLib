@@ -9,6 +9,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="nms1_19_R1" />
         <module name="core" />
+        <module name="nms1_19_R2" />
+        <module name="nms1_19_R3" />
+        <module name="nms1_18_R2" />
+        <module name="nms1_19_R11" />
         <module name="dist" />
         <module name="Dwellin" />
       </profile>
@@ -16,7 +20,6 @@
     <bytecodeTargetLevel>
       <module name="compiler" target="11" />
       <module name="core (1) (com.github.sachin)" target="1.8" />
-      <module name="nms1_18_R2" target="1.8" />
       <module name="nms1_19_R1 (1) (com.github.sachin)" target="1.8" />
     </bytecodeTargetLevel>
   </component>

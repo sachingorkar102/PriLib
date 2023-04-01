@@ -4,31 +4,31 @@ import com.github.sachin.prilib.nms.NBTItem;
 import com.github.sachin.prilib.nms.AbstractNMSHandler;
 import com.github.sachin.prilib.utils.FastItemStack;
 import com.github.sachin.prilib.utils.ItemUtils;
-import com.github.sachin.prilib.utils.RandomUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.goal.RangedCrossbowAttackGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPillager;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftVillager;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Pillager;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.Permission;
 
 import java.lang.reflect.Field;
@@ -137,15 +137,23 @@ public class NMSHandler extends AbstractNMSHandler {
     }
 
     @Override
-    public void addFollowGoal(Villager vil, ItemStack[] temptItems, double speed, Permission permission) {
+    public void addFollowGoal(Villager vil, ItemStack[] temptItems, double speed, Permission permission,boolean checkPermission,boolean update) {
         net.minecraft.world.entity.npc.Villager nmsVil = ((CraftVillager)vil).getHandle();
         List<net.minecraft.world.item.ItemStack> nmsStackList = new ArrayList<>();
 
         for(ItemStack item : temptItems){
             nmsStackList.add(CraftItemStack.asNMSCopy(item));
         }
-        VillagerTemptGoal goal = new VillagerTemptGoal(nmsVil,speed, Ingredient.of(nmsStackList.toArray(new net.minecraft.world.item.ItemStack[0])),permission);
+        VillagerTemptGoal goal = new VillagerTemptGoal(nmsVil,speed, Ingredient.of(nmsStackList.toArray(new net.minecraft.world.item.ItemStack[0])),checkPermission);
+        if(update){
+            nmsVil.goalSelector.removeGoal(goal);
+        }
         nmsVil.goalSelector.addGoal(1,goal);
+    }
+
+    @Override
+    public void updateFollowGoal(Villager vil, boolean checkPermission) {
+
     }
 
     @Override
@@ -154,4 +162,26 @@ public class NMSHandler extends AbstractNMSHandler {
 
         nmsPill.goalSelector.addGoal(1,new HoldBackCrossBowGoal(nmsPill,0.7));
     }
+
+    @Override
+    public void fillLoot(Player player, Lootable lootTable) {
+        net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer)player).getHandle();
+        Level level = nmsPlayer.getLevel();
+
+        if(lootTable instanceof BlockState){
+            BlockState blockState = (BlockState) lootTable;
+            RandomizableContainerBlockEntity lootableBlock = (RandomizableContainerBlockEntity) level.getBlockEntity(new BlockPos(blockState.getX(),blockState.getY(),blockState.getZ()));
+            lootableBlock.unpackLootTable(nmsPlayer);
+            return;
+        }
+        MinecartChest minecart = (MinecartChest) ((CraftEntity)lootTable).getHandle();
+        minecart.unpackChestVehicleLootTable(nmsPlayer);
+    }
+
+    @Override
+    public Object getElytraUpdatePacket(Object handle, Entity itemFrame, NamespacedKey key) {
+        return null;
+    }
+
+
 }

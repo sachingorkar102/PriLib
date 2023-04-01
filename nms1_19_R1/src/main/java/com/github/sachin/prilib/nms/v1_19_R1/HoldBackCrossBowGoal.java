@@ -2,6 +2,7 @@ package com.github.sachin.prilib.nms.v1_19_R1;
 
 
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
@@ -12,6 +13,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
+import java.lang.reflect.Method;
+
 // Original Class: https://github.com/seymourimadeit/Big-Brain/blob/main/src/main/java/tallestegg/bigbrain/entity/ai/goals/RunWhileChargingGoal.java
 public class HoldBackCrossBowGoal extends RandomStrollGoal {
 
@@ -21,7 +24,7 @@ public class HoldBackCrossBowGoal extends RandomStrollGoal {
 
     @Override
     public boolean canUse() {
-        return ((Pillager) mob).isUsingItem() && mob.getUseItem().getItem() instanceof CrossbowItem
+        return  mob.getUseItem().getItem() instanceof CrossbowItem
                 && mob.getTarget() != null && !CrossbowItem.isCharged(mob.getUseItem())
                 && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT, this.mob.getMainHandItem()) == 0
                 && this.findPosition();
@@ -69,7 +72,7 @@ public class HoldBackCrossBowGoal extends RandomStrollGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return !CrossbowItem.isCharged(mob.getUseItem()) && ((Pillager) mob).isUsingItem()
+        return !CrossbowItem.isCharged(mob.getUseItem())
                 && mob.getUseItem().getItem() instanceof CrossbowItem && !this.mob.isVehicle();
     }
 

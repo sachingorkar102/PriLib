@@ -27,8 +27,6 @@
                     <target>${java.version}</target>
                 </configuration>
                 <dependencies>
-                    <!-- Compiler -->
-                    <!-- The default compiler has troubles with the class PlayerDataInfo -->
                     <dependency>
                         <groupId>org.codehaus.plexus</groupId>
                         <artifactId>plexus-compiler-eclipse</artifactId>
@@ -84,7 +82,7 @@
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
             <artifactId>core</artifactId>
-            <version>1.0</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

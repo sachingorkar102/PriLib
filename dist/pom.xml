@@ -44,13 +44,37 @@
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
             <artifactId>core</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sachin.prilib</groupId>
+            <artifactId>nms1_19_R3</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sachin.prilib</groupId>
+            <artifactId>nms1_19_R2</artifactId>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
             <artifactId>nms1_19_R1</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sachin.prilib</groupId>
+            <artifactId>nms1_19_R11</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sachin.prilib</groupId>
+            <artifactId>nms1_18_R2</artifactId>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

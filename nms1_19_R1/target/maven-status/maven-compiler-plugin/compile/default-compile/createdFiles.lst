@@ -1,5 +1,5 @@
-com/github/sachin/prilib/nms/v1_19_R1/NMSHandler$HelpWantedArmorStand.class
-com/github/sachin/prilib/nms/v1_19_R1/NMSHandler.class
-com/github/sachin/prilib/nms/v1_19_R1/ImplNBTItem.class
-com/github/sachin/prilib/nms/v1_19_R1/HoldBackCrossBowGoal.class
-com/github/sachin/prilib/nms/v1_19_R1/VillagerTemptGoal.class
+com\github\sachin\prilib\nms\v1_19_R1\ImplNBTItem.class
+com\github\sachin\prilib\nms\v1_19_R1\VillagerTemptGoal.class
+com\github\sachin\prilib\nms\v1_19_R1\HoldBackCrossBowGoal.class
+com\github\sachin\prilib\nms\v1_19_R1\NMSHandler.class
+com\github\sachin\prilib\nms\v1_19_R1\NMSHandler$HelpWantedArmorStand.class
