@@ -87,6 +87,10 @@ public final class Prilib {
         return nmsHandler;
     }
 
+    public String getMcVersion() {
+        return mcVersion;
+    }
+
     public String getBukkitVersion() {
         return bukkitVersion;
     }

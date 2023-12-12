@@ -2,6 +2,8 @@ package com.github.sachin.prilib.nms;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Pillager;
@@ -11,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.Permission;
+
+import java.util.List;
 
 public abstract class AbstractNMSHandler {
 
@@ -32,4 +36,27 @@ public abstract class AbstractNMSHandler {
     public abstract void fillLoot(Player player, Lootable lootTable);
 
     public abstract Object getElytraUpdatePacket(Object handle, Entity itemframe, NamespacedKey key);
+
+    public void placeWater(Block block){};
+
+    public void attack(Player player,Entity target){};
+
+    public boolean placeItem(Player player, Location location, ItemStack item, BlockFace hitFace, String tweakName, boolean playSound){return false;}
+
+    public void spawnVillager(Villager villager,boolean update){};
+
+    public void avoidPlayer(Entity entity,Player player,ConfigurationSection config, NamespacedKey key){};
+
+
+    public boolean matchAxoltlVariant(Entity entity,String color){return false;}
+    public boolean isScreamingGoat(Entity entity){return false;}
+
+    public List<Entity> getEntitiesWithinRadius(int radius, Entity center){return null;}
+
+
+    public ItemStack createMap(Location dist,byte zoom,boolean biomePreview){return null;}
+
+    public boolean matchFrogVariant(Entity entity, String variant){return false;}
+
+    public Object getBlockHighlightPacket(Location loc,int color){return null;}
 }

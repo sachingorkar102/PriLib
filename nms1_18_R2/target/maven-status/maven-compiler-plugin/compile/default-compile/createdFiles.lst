@@ -1,5 +1,6 @@
 com\github\sachin\prilib\nms\v1_18_R2\NMSHandler.class
 com\github\sachin\prilib\nms\v1_18_R2\ImplNBTItem.class
+com\github\sachin\prilib\nms\v1_18_R2\NMSHandler$FleePathFinder.class
 com\github\sachin\prilib\nms\v1_18_R2\HoldBackCrossBowGoal.class
 com\github\sachin\prilib\nms\v1_18_R2\VillagerTemptGoal.class
 com\github\sachin\prilib\nms\v1_18_R2\NMSHandler$HelpWantedArmorStand.class
