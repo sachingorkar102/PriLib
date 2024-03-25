@@ -183,21 +183,21 @@ public class NMSHandler extends AbstractNMSHandler {
         nmsPill.goalSelector.addGoal(1,new HoldBackCrossBowGoal(nmsPill,0.7));
     }
 
-    @Override
-    public void fillLoot(Player player, Lootable lootTable) {
-        net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer)player).getHandle();
-        Level level = nmsPlayer.level;
-
-        if(lootTable instanceof BlockState){
-            BlockState blockState = (BlockState) lootTable;
-
-//            RandomizableContainerBlockEntity lootableBlock = (RandomizableContainerBlockEntity) level.getBlockEntity(new BlockPos(blockState.getX() ,blockState.getY(),blockState.getZ()));
-//            lootableBlock.unpackLootTable(nmsPlayer);
-            return;
-        }
-        MinecartChest minecart = (MinecartChest) ((CraftEntity)lootTable).getHandle();
-        minecart.unpackLootTable(nmsPlayer);
-    }
+//    @Override
+//    public void fillLoot(Player player, Lootable lootTable) {
+//        net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer)player).getHandle();
+//        Level level = nmsPlayer.level;
+//
+//        if(lootTable instanceof BlockState){
+//            BlockState blockState = (BlockState) lootTable;
+//
+////            RandomizableContainerBlockEntity lootableBlock = (RandomizableContainerBlockEntity) level.getBlockEntity(new BlockPos(blockState.getX() ,blockState.getY(),blockState.getZ()));
+////            lootableBlock.unpackLootTable(nmsPlayer);
+//            return;
+//        }
+//        MinecartChest minecart = (MinecartChest) ((CraftEntity)lootTable).getHandle();
+//        minecart.unpackLootTable(nmsPlayer);
+//    }
 
     @Override
     public Object getElytraUpdatePacket(Object handle, Entity itemFrame, NamespacedKey key) {

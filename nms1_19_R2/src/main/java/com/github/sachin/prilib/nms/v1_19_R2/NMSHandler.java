@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -29,6 +30,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlockContainer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
@@ -61,6 +63,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -190,19 +193,47 @@ public class NMSHandler extends AbstractNMSHandler {
     }
 
     @Override
-    public void fillLoot(Player player, Lootable lootTable) {
+    public void fill(Player player, Lootable lootTable, String lootTableKey, boolean resetSeed) {
         net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer)player).getHandle();
         Level level = nmsPlayer.getLevel();
 
         if(lootTable instanceof BlockState){
             BlockState blockState = (BlockState) lootTable;
-            RandomizableContainerBlockEntity lootableBlock = (RandomizableContainerBlockEntity) level.getBlockEntity(new BlockPos(blockState.getX(),blockState.getY(),blockState.getZ()));
-            lootableBlock.unpackLootTable(nmsPlayer);
+            BlockEntity blockEntity = level.getBlockEntity(new BlockPos(blockState.getX(),blockState.getY(),blockState.getZ()));
+            if(blockEntity instanceof RandomizableContainerBlockEntity){
+                RandomizableContainerBlockEntity lootableBlock = (RandomizableContainerBlockEntity) blockEntity;
+                lootableBlock.setLootTable(new ResourceLocation(lootTableKey),lootableBlock.lootTableSeed);
+                if(lootableBlock.canOpen(nmsPlayer)){
+                    if(resetSeed){
+                        lootableBlock.setLootTable(new ResourceLocation(lootTableKey), ThreadLocalRandom.current().nextLong());
+                    }
+                    lootableBlock.unpackLootTable(nmsPlayer);
+                }
+            }
             return;
         }
         MinecartChest minecart = (MinecartChest) ((CraftEntity)lootTable).getHandle();
+        minecart.setLootTable(new ResourceLocation(lootTableKey));
+        if(resetSeed){
+            minecart.setLootTableSeed(ThreadLocalRandom.current().nextLong());
+        }
         minecart.unpackChestVehicleLootTable(nmsPlayer);
     }
+
+//    @Override
+//    public void fillLoot(Player player, Lootable lootTable) {
+//        net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer)player).getHandle();
+//        Level level = nmsPlayer.getLevel();
+//
+//        if(lootTable instanceof BlockState){
+//            BlockState blockState = (BlockState) lootTable;
+//            RandomizableContainerBlockEntity lootableBlock = (RandomizableContainerBlockEntity) level.getBlockEntity(new BlockPos(blockState.getX(),blockState.getY(),blockState.getZ()));
+//            lootableBlock.unpackLootTable(nmsPlayer);
+//            return;
+//        }
+//        MinecartChest minecart = (MinecartChest) ((CraftEntity)lootTable).getHandle();
+//        minecart.unpackChestVehicleLootTable(nmsPlayer);
+//    }
 
     @Override
     public Object getElytraUpdatePacket(Object handle, Entity itemframe, NamespacedKey key) {

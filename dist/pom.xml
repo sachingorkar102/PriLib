@@ -49,19 +49,19 @@
         </dependency>
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
-            <artifactId>nms1_20_R3</artifactId>
+            <artifactId>nms1_20_4</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
-            <artifactId>nms1_20_R2</artifactId>
+            <artifactId>nms1_20_2</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
-            <artifactId>nms1_20_R1</artifactId>
+            <artifactId>nms1_20_1</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
@@ -98,6 +98,12 @@
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
             <artifactId>nms1_17_R1</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sachin.prilib</groupId>
+            <artifactId>nms1_16_R3</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>

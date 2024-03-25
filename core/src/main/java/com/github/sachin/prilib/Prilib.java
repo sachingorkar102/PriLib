@@ -23,7 +23,7 @@ public final class Prilib {
     public final Random random = new Random();
     public final ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
     private String bukkitVersion;
-    private String mcVersion;
+    private McVersion mcVersion;
 
     private boolean isEnabled;
     private boolean isNMSEnabled;
@@ -32,7 +32,7 @@ public final class Prilib {
 
     public void initialize(){
         this.isNMSEnabled = loadVersions(plugin, bukkitVersion,mcVersion);
-        log("Running "+ bukkitVersion +" bukkit version and "+mcVersion+" minecraft version");
+        log("Running "+mcVersion+" minecraft version");
     }
 
     public Prilib(JavaPlugin plugin){
@@ -40,23 +40,22 @@ public final class Prilib {
         this.isEnabled = true;
         this.isNMSEnabled = true;
         this.plugin = plugin;
-        this.bukkitVersion = plugin.getServer().getClass().getPackage().getName().split("\\.")[3];
-        int currentMajor = Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[0]);
-        int currentMinor = Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[1].split("-")[0]);
-        int currentPatch = Bukkit.getBukkitVersion().chars().filter(ch -> ch == '.').count() == 2 ? 0 : Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[2].split("-")[0]);
-        mcVersion = currentMajor+"."+currentMinor;
-        if(currentPatch>0){
-            mcVersion = mcVersion+"."+currentPatch;
+        mcVersion = McVersion.current();
+
+        if (mcVersion.isAtLeast(1, 20)) {
+            bukkitVersion = "v" + mcVersion.getMajor() + "_" + mcVersion.getMinor() + ((mcVersion.getPatch() > 0) ? ("_" + mcVersion.getPatch()) : "");
+        } else {
+            bukkitVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         }
 
     }
 
-    private boolean loadVersions(JavaPlugin plugin, String bukkitVersion,String mcVersion){
+    private boolean loadVersions(JavaPlugin plugin, String bukkitVersion,McVersion mcVersion){
         String packageName = bukkitVersion;
-        if(mcVersion.equals("1.19")){
+        if(mcVersion.equals(new McVersion(1,19))){
             packageName = "v1_19_R1";
         }
-        else if(mcVersion.equals("1.19.1") || mcVersion.equals("1.19.2")){
+        else if(mcVersion.equals(new McVersion(1,19,1)) || mcVersion.equals(new McVersion(1,19,2))){
             packageName = "v1_19_R11";
         }
         try {
@@ -87,7 +86,7 @@ public final class Prilib {
         return nmsHandler;
     }
 
-    public String getMcVersion() {
+    public McVersion getMcVersion() {
         return mcVersion;
     }
 

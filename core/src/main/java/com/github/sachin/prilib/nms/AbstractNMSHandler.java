@@ -2,6 +2,7 @@ package com.github.sachin.prilib.nms;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
@@ -33,7 +34,9 @@ public abstract class AbstractNMSHandler {
 
     public abstract void addHoldBackCrossBowGoal(Pillager pil);
 
-    public abstract void fillLoot(Player player, Lootable lootTable);
+//    public abstract void fillLoot(Player player, Lootable lootTable);
+
+    public void fill(Player player,Lootable lootTable,String lootTableKey,boolean resetSeed){}
 
     public abstract Object getElytraUpdatePacket(Object handle, Entity itemframe, NamespacedKey key);
 
@@ -59,4 +62,8 @@ public abstract class AbstractNMSHandler {
     public boolean matchFrogVariant(Entity entity, String variant){return false;}
 
     public Object getBlockHighlightPacket(Location loc,int color){return null;}
+
+    public ItemStack setVillagerEgg(ItemStack item,Villager villager){return null;}
+
+    public Villager getVillager(ItemStack item, World world, Location location){return null;}
 }

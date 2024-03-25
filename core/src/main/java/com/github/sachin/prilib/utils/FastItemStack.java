@@ -72,6 +72,11 @@ public class FastItemStack {
         return this;
     }
 
+    public FastItemStack replaceInDisplay(String target,String replacement){
+        meta.setDisplayName(getDisplay().replace(target,replacement));
+        return this;
+    }
+
     public String getDisplay(){
         return meta.getDisplayName();
     }
@@ -86,6 +91,10 @@ public class FastItemStack {
         return this;
     }
 
+    public FastItemStack replaceInLore(String target,String replacement){
+        meta.setLore(getLore().stream().map(s -> s.replace(target,replacement)).collect(Collectors.toList()));
+        return this;
+    }
     public FastItemStack addLore(String... lore){
         if(meta.hasLore()){
             List<String> oldLore = meta.getLore();
