@@ -52,6 +52,8 @@ public abstract class AbstractNMSHandler {
 
 
     public boolean matchAxoltlVariant(Entity entity,String color){return false;}
+
+    public boolean matchWolfVariant(Entity entity,String variant){return variant.equalsIgnoreCase("PALE");}
     public boolean isScreamingGoat(Entity entity){return false;}
 
     public List<Entity> getEntitiesWithinRadius(int radius, Entity center){return null;}

@@ -1,14 +1,14 @@
-package com.github.sachin.prilib.nms.v1_20_5;
+package com.github.sachin.prilib.nms.v1_21;
 
 import com.github.sachin.prilib.nms.AbstractNMSHandler;
 import com.github.sachin.prilib.nms.NBTItem;
 import com.github.sachin.prilib.utils.FastItemStack;
 import com.github.sachin.prilib.utils.ItemUtils;
+import com.google.common.base.Enums;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
@@ -27,22 +27,19 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WolfVariant;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
-import net.minecraft.world.item.component.SeededContainerLoot;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
-import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
@@ -53,12 +50,12 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPillager;
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_20_R4.entity.CraftVillager;
-import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPillager;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftVillager;
+import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -205,7 +202,8 @@ public class NMSHandler extends AbstractNMSHandler {
         net.minecraft.world.entity.player.Player nmsPlayer = player != null ? ((CraftPlayer)player).getHandle() : null;
 
 
-        ResourceLocation resourceLocation = new ResourceLocation(lootTableKey);
+        ResourceLocation resourceLocation = ResourceLocation.parse(lootTableKey);
+
         if(lootTable instanceof BlockState){
             BlockState blockState = (BlockState) lootTable;
             Level level = ((CraftWorld)blockState.getWorld()).getHandle();
@@ -368,6 +366,7 @@ public class NMSHandler extends AbstractNMSHandler {
     public boolean matchWolfVariant(Entity entity,String variant){
         return ((Wolf)entity).getVariant().toString().equalsIgnoreCase(variant);
     }
+
     @Override
     public boolean isScreamingGoat(Entity entity) {
         return ((Goat)entity).isScreaming();

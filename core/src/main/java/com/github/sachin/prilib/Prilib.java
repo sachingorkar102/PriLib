@@ -58,6 +58,9 @@ public final class Prilib {
         else if(mcVersion.equals(new McVersion(1,19,1)) || mcVersion.equals(new McVersion(1,19,2))){
             packageName = "v1_19_R11";
         }
+        else if(mcVersion.equals(new McVersion(1,20,6))){
+            packageName = "v1_20_5";
+        }
         try {
             //abstractNmsHandler = (AbstractNMSHandler) Class.forName(packageName + ".internal.nms." + internalsName + ".NMSHandler").newInstance();
             nmsHandler = (AbstractNMSHandler) Class.forName("com.github.sachin.prilib.nms."+packageName+".NMSHandler").getDeclaredConstructor().newInstance(null);

@@ -1,12 +1,11 @@
-package com.github.sachin.prilib.nms.v1_20_4;
+package com.github.sachin.prilib.nms.v1_21;
 
 import com.github.sachin.prilib.nms.NBTItem;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.item.ItemStack;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import net.minecraft.world.item.component.CustomData;
+import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 
 public class ImplNBTItem extends NBTItem {
 
@@ -15,15 +14,18 @@ public class ImplNBTItem extends NBTItem {
 
     public ImplNBTItem(org.bukkit.inventory.ItemStack item){
         this.item = CraftItemStack.asNMSCopy(item);
-        this.compound = this.item.getOrCreateTag();
+
+        this.compound = this.item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
     }
 
 
     @Override
     public void setString(String key, String value) {
-
-        
         compound.putString(key,value);
+    }
+
+    public void setTag(String key, CompoundTag compound){
+        this.compound.put(key,compound);
     }
 
     @Override
@@ -76,9 +78,13 @@ public class ImplNBTItem extends NBTItem {
         return compound.contains(key);
     }
 
+    public CompoundTag getTag() {
+        return compound;
+    }
+
     @Override
     public org.bukkit.inventory.ItemStack getItem() {
-        item.save(compound);
+        item.set(DataComponents.CUSTOM_DATA,CustomData.of(compound));
         return CraftItemStack.asBukkitCopy(item);
     }
 
