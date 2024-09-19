@@ -62,17 +62,31 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.loot.Lootable;
 import org.bukkit.permissions.Permission;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.profile.PlayerProfile;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class NMSHandler extends AbstractNMSHandler {
+
+    private static Constructor<?> resolvableProfileConst = null;
+
+    static {
+        try {
+            Class<?> profile = Class.forName("net.minecraft.world.item.component.ResolvableProfile");
+            resolvableProfileConst = profile.getDeclaredConstructor(GameProfile.class);
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public NBTItem newItem(ItemStack item) {
         return new ImplNBTItem(item);
@@ -143,27 +157,26 @@ public class NMSHandler extends AbstractNMSHandler {
 
     @Override
     public void applyHeadTexture(SkullMeta meta, String b64) {
-        Field metaProfileField ;
-        Method metaSetProfileMethod;
         try {
-            metaSetProfileMethod = meta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-            metaSetProfileMethod.setAccessible(true);
-
-            metaSetProfileMethod.invoke(meta, makeProfile(b64));
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            Field metaProfileField = meta.getClass().getDeclaredField("profile");
+            metaProfileField.setAccessible(true);
+            metaProfileField.set(meta, makeProfile(b64));
+        } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException ex2) {
             try {
-                metaProfileField = meta.getClass().getDeclaredField("profile");
+                Field metaProfileField = meta.getClass().getDeclaredField("profile");
                 metaProfileField.setAccessible(true);
-
-                metaProfileField.set(meta, makeProfile(b64));
-
-            } catch (NoSuchFieldException | IllegalAccessException ex2) {
-                ex2.printStackTrace();
+                if (resolvableProfileConst != null) {
+                    Object newProfile = resolvableProfileConst.newInstance(makeProfile(b64));
+                    metaProfileField.set(meta, newProfile);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException | InstantiationException | InvocationTargetException ex3) {
+                ex3.printStackTrace();
             }
         }
     }
 
     public GameProfile makeProfile(String b64) {
+
         UUID id = new UUID(b64.substring(b64.length() - 20).hashCode(),b64.substring(b64.length() - 10).hashCode());
         GameProfile profile = new GameProfile(id, "someName");
         profile.getProperties().put("textures", new Property("textures", b64));
