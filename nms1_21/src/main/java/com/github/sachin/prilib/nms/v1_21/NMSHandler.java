@@ -42,6 +42,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.GameEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -50,6 +51,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.v1_21_R1.CraftGameEvent;
+import org.bukkit.craftbukkit.v1_21_R1.CraftRegistry;
 import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPillager;
@@ -427,7 +430,11 @@ public class NMSHandler extends AbstractNMSHandler {
         return villager;
     }
 
-
+    @Override
+    public void triggerGameEvent(Player player,org.bukkit.GameEvent gameEvent, Location location) {
+        ServerLevel level = ((CraftWorld)location.getWorld()).getHandle();
+        level.gameEvent(((CraftPlayer)player).getHandle(),CraftRegistry.bukkitToMinecraftHolder(gameEvent,Registries.GAME_EVENT),new BlockPos(location.getBlockX(),location.getBlockY(),location.getBlockZ()));
+    }
 
     private static class FleePathFinder<T extends net.minecraft.world.entity.LivingEntity> extends AvoidEntityGoal<T> {
 

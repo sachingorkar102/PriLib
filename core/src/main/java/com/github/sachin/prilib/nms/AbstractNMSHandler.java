@@ -1,5 +1,6 @@
 package com.github.sachin.prilib.nms;
 
+import org.bukkit.GameEvent;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -68,4 +69,6 @@ public abstract class AbstractNMSHandler {
     public ItemStack setVillagerEgg(ItemStack item,Villager villager){return null;}
 
     public Villager getVillager(ItemStack item, World world, Location location){return null;}
+
+    public void triggerGameEvent(Player player,GameEvent gameEvent,Location location){}
 }

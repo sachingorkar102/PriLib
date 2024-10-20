@@ -8,6 +8,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload;
@@ -40,14 +41,12 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.v1_20_R3.CraftGameEvent;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPillager;
@@ -82,6 +81,12 @@ public class NMSHandler extends AbstractNMSHandler {
         nmsVil.restock();
     }
 
+    @Override
+    public void triggerGameEvent(Player player, GameEvent gameEvent, Location location) {
+        ServerLevel level = ((CraftWorld)player.getWorld()).getHandle();
+        level.gameEvent(((CraftPlayer) player).getHandle(), ((CraftGameEvent)gameEvent).getHandle(),
+                new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+    }
 
     @Override
     public Entity spawnHelpWantedArmorstand(Location loc, ConfigurationSection config, float facing) {

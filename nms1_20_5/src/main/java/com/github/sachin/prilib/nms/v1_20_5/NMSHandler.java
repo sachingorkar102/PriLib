@@ -45,6 +45,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.GameEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -53,6 +54,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.v1_20_R4.CraftRegistry;
 import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R4.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPillager;
@@ -97,9 +99,14 @@ public class NMSHandler extends AbstractNMSHandler {
 
     }
 
+    @Override
+    public void triggerGameEvent(Player player, GameEvent gameEvent, Location location) {
+        ServerLevel level = ((CraftWorld)player.getWorld()).getHandle();
+        level.gameEvent(((CraftPlayer) player).getHandle(), CraftRegistry.bukkitToMinecraftHolder(gameEvent, Registries.GAME_EVENT),
+                new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+    }
 
-
-//    check-time: 23000
+    //    check-time: 23000
 //    villager-spawn-chance: 0.01
 //    block-speedup-additional-chance: 0.01
 //    block-check-radius: 3

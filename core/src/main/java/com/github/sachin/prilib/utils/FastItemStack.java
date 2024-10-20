@@ -267,6 +267,26 @@ public class FastItemStack {
         return this;
     }
 
+
+    public int getDamage(){
+        if(meta instanceof Damageable){
+            return ((Damageable) meta).getDamage();
+        }
+        return 0;
+    }
+
+    public FastItemStack setDamage(int amount){
+        if(meta instanceof Damageable){
+            Damageable damageable = (Damageable) meta;
+            damageable.setDamage(damageable.getDamage()+amount);
+        }
+        return this;
+    }
+
+    public int getMaxDurability(){
+        return item.getType().getMaxDurability();
+    }
+
     public <T,Z> boolean hasKey(String key, PersistentDataType<T,Z> type){
         return hasKey(instance.getKey(key), type);
     }

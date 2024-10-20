@@ -34,6 +34,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.GameEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -76,6 +77,13 @@ public class NMSHandler extends AbstractNMSHandler {
         nmsVil.restock();
     }
 
+    @Override
+    public void triggerGameEvent(Player player, GameEvent gameEvent, Location location) {
+
+        ServerLevel level = ((CraftWorld)player.getWorld()).getHandle();
+        level.gameEvent(((CraftPlayer) player).getHandle(), gameEvent.equals(GameEvent.CONTAINER_OPEN) ? net.minecraft.world.level.gameevent.GameEvent.CONTAINER_OPEN : net.minecraft.world.level.gameevent.GameEvent.CONTAINER_CLOSE,
+                new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+    }
 
     @Override
     public Entity spawnHelpWantedArmorstand(Location loc, ConfigurationSection config, float facing) {

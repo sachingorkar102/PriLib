@@ -39,6 +39,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.GameEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -46,6 +47,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.v1_20_R2.CraftGameEvent;
 import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPillager;
@@ -79,6 +81,13 @@ public class NMSHandler extends AbstractNMSHandler {
     public void restock(Villager vil) {
         net.minecraft.world.entity.npc.Villager nmsVil = ((CraftVillager) vil).getHandle();
         nmsVil.restock();
+    }
+
+    @Override
+    public void triggerGameEvent(Player player, GameEvent gameEvent, Location location) {
+        ServerLevel level = ((CraftWorld)player.getWorld()).getHandle();
+        level.gameEvent(((CraftPlayer) player).getHandle(), ((CraftGameEvent)gameEvent).getHandle(),
+                new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
     }
 
 
