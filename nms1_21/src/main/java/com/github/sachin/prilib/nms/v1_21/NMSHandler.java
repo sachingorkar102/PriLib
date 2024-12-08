@@ -186,20 +186,7 @@ public class NMSHandler extends AbstractNMSHandler {
         return profile;
     }
 
-    @Override
-    public void addFollowGoal(Villager vil, ItemStack[] temptItems, double speed, Permission permission,boolean checkPermission,boolean update) {
-        net.minecraft.world.entity.npc.Villager nmsVil = ((CraftVillager)vil).getHandle();
-        List<net.minecraft.world.item.ItemStack> nmsStackList = new ArrayList<>();
 
-        for(ItemStack item : temptItems){
-            nmsStackList.add(CraftItemStack.asNMSCopy(item));
-        }
-        VillagerTemptGoal goal = new VillagerTemptGoal(nmsVil,speed, Ingredient.of(nmsStackList.toArray(new net.minecraft.world.item.ItemStack[0])),checkPermission);
-        if(update){
-            nmsVil.goalSelector.removeGoal(goal);
-        }
-        nmsVil.goalSelector.addGoal(1,goal);
-    }
 
     @Override
     public void updateFollowGoal(Villager vil, boolean checkPermission) {
@@ -240,6 +227,7 @@ public class NMSHandler extends AbstractNMSHandler {
         MinecartChest minecart = (MinecartChest) ((CraftEntity)lootTable).getHandle();
         minecart.setLootTable(ResourceKey.create(Registries.LOOT_TABLE,resourceLocation));
         if(resetSeed){
+
             minecart.setLootTableSeed(minecart.level().random.nextLong());
         }
         minecart.unpackChestVehicleLootTable(nmsPlayer);
@@ -323,6 +311,21 @@ public class NMSHandler extends AbstractNMSHandler {
         return false;
     }
 
+    @Override
+    public void addFollowGoal(Villager vil, ItemStack[] temptItems, double speed, Permission permission,boolean checkPermission,boolean update) {
+        net.minecraft.world.entity.npc.Villager nmsVil = ((CraftVillager)vil).getHandle();
+        List<net.minecraft.world.item.ItemStack> nmsStackList = new ArrayList<>();
+
+        for(ItemStack item : temptItems){
+            nmsStackList.add(CraftItemStack.asNMSCopy(item));
+        }
+        VillagerTemptGoal goal = new VillagerTemptGoal(nmsVil,speed, Ingredient.of(nmsStackList.toArray(new net.minecraft.world.item.ItemStack[0])),checkPermission);
+
+        if(update){
+            nmsVil.goalSelector.removeGoal(goal);
+        }
+        nmsVil.goalSelector.addGoal(1,goal);
+    }
 
 
     @Override
@@ -334,6 +337,25 @@ public class NMSHandler extends AbstractNMSHandler {
         }
         vil.goalSelector.addGoal(2,goal);
 
+    }
+
+    @Override
+    public void removeTemptGoal(Villager villager){
+        net.minecraft.world.entity.npc.Villager vil = (net.minecraft.world.entity.npc.Villager) ((CraftEntity)villager).getHandle();
+        TemptGoal goal = new TemptGoal(vil, 0.6, Ingredient.of(Items.EMERALD_BLOCK), false);
+        vil.goalSelector.removeGoal(goal);
+    }
+
+    @Override
+    public void removeTemptGoal(Villager vil, ItemStack[] temptItems, double speed, Permission permission,boolean checkPermission,boolean update) {
+        net.minecraft.world.entity.npc.Villager nmsVil = ((CraftVillager)vil).getHandle();
+        List<net.minecraft.world.item.ItemStack> nmsStackList = new ArrayList<>();
+
+        for(ItemStack item : temptItems){
+            nmsStackList.add(CraftItemStack.asNMSCopy(item));
+        }
+        VillagerTemptGoal goal = new VillagerTemptGoal(nmsVil,speed, Ingredient.of(nmsStackList.toArray(new net.minecraft.world.item.ItemStack[0])),checkPermission);
+        nmsVil.goalSelector.removeGoal(goal);
     }
 
     @Override

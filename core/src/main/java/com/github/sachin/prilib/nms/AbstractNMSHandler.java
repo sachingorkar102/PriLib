@@ -30,6 +30,7 @@ public abstract class AbstractNMSHandler {
     public abstract void applyHeadTexture(SkullMeta meta, String b64);
 
     public abstract void addFollowGoal(Villager vil, ItemStack[] temptItems, double speed, Permission perm,boolean checkPermission,boolean update);
+    public void removeTemptGoal(Villager vil, ItemStack[] temptItems, double speed, Permission perm,boolean checkPermission,boolean update){}
 
     public abstract void updateFollowGoal(Villager vil,boolean checkPermission);
 
@@ -71,4 +72,6 @@ public abstract class AbstractNMSHandler {
     public Villager getVillager(ItemStack item, World world, Location location){return null;}
 
     public void triggerGameEvent(Player player,GameEvent gameEvent,Location location){}
+
+    public void removeTemptGoal(Villager villager){}
 }

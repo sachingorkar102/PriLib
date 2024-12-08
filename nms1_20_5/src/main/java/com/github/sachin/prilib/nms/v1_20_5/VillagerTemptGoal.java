@@ -1,5 +1,6 @@
 package com.github.sachin.prilib.nms.v1_20_5;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;

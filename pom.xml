@@ -21,6 +21,8 @@
     <module>nms1_20_4</module>
     <module>nms1_20_5</module>
       <module>nms1_21</module>
+      <module>nms1_21_3</module>
+      <module>nms1_21_4</module>
   </modules>
 
   <properties>

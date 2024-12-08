@@ -52,6 +52,7 @@ public final class Prilib {
 
     private boolean loadVersions(JavaPlugin plugin, String bukkitVersion,McVersion mcVersion){
         String packageName = bukkitVersion;
+
         if(mcVersion.equals(new McVersion(1,19))){
             packageName = "v1_19_R1";
         }
@@ -61,8 +62,14 @@ public final class Prilib {
         else if(mcVersion.equals(new McVersion(1,20,6))){
             packageName = "v1_20_5";
         }
-        else if(mcVersion.isAtLeast(1,21)){
+        else if(mcVersion.equals(new McVersion(1,21)) || mcVersion.equals(new McVersion(1,21,1))){
             packageName = "v1_21";
+        }
+        else if(mcVersion.equals(new McVersion(1,21,3))){
+            packageName = "v1_21_3";
+        }
+        else if(mcVersion.isAtLeast(1,21,4)){
+            packageName = "v1_21_4";
         }
         try {
             //abstractNmsHandler = (AbstractNMSHandler) Class.forName(packageName + ".internal.nms." + internalsName + ".NMSHandler").newInstance();
