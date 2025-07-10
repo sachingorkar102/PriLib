@@ -13,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload;
+import net.minecraft.network.protocol.game.ClientboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
@@ -296,7 +297,7 @@ public class NMSHandler extends AbstractNMSHandler {
 
         UseOnContext context = new UseOnContext(nmsPlayer, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(0.5F, 1F, 0.5F), Direction.UP, pos, false));
         InteractionResult res = nmsItem.useOn(context);
-        if(res==InteractionResult.CONSUME){
+        if(res.consumesAction()){
             player.swingMainHand();
             BlockPos placedPos = context.getClickedPos().relative(context.getClickedFace());
             Block placedBlock = player.getWorld().getBlockAt(placedPos.getX(),placedPos.getY(),placedPos.getZ());

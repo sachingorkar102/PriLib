@@ -49,10 +49,23 @@
         </dependency>
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
+            <artifactId>nms1_21_6</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sachin.prilib</groupId>
+            <artifactId>nms1_21_5</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sachin.prilib</groupId>
             <artifactId>nms1_21_4</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>com.github.sachin.prilib</groupId>
             <artifactId>nms1_21_3</artifactId>

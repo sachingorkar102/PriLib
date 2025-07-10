@@ -74,4 +74,7 @@ public abstract class AbstractNMSHandler {
     public void triggerGameEvent(Player player,GameEvent gameEvent,Location location){}
 
     public void removeTemptGoal(Villager villager){}
+
+    public boolean isPlayerJumping(Object inputObj){return false;}
+    public boolean isPlayerHoldingShift(Object inputObj){return false;}
 }

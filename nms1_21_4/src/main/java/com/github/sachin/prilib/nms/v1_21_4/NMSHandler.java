@@ -29,6 +29,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.vehicle.MinecartChest;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.context.UseOnContext;
@@ -40,10 +41,8 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.GameEvent;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import net.minecraft.world.entity.player.Input;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -290,7 +289,7 @@ public class NMSHandler extends AbstractNMSHandler {
 
         UseOnContext context = new UseOnContext(nmsPlayer, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(0.5F, 1F, 0.5F), Direction.UP, pos, false));
         InteractionResult res = nmsItem.useOn(context);
-        if(res==InteractionResult.CONSUME){
+        if(res.consumesAction()){
             player.swingMainHand();
             BlockPos placedPos = context.getClickedPos().relative(context.getClickedFace());
             Block placedBlock = player.getWorld().getBlockAt(placedPos.getX(),placedPos.getY(),placedPos.getZ());
@@ -309,17 +308,20 @@ public class NMSHandler extends AbstractNMSHandler {
     public void addFollowGoal(Villager vil, ItemStack[] temptItems, double speed, Permission permission,boolean checkPermission,boolean update) {
         net.minecraft.world.entity.npc.Villager nmsVil = ((CraftVillager)vil).getHandle();
         List<net.minecraft.world.item.ItemStack> nmsStackList = new ArrayList<>();
-
+        List<Item> nmsMaterialList = new ArrayList<>();
         for(ItemStack item : temptItems){
             nmsStackList.add(CraftItemStack.asNMSCopy(item));
         }
-        String perm = null;
-        if(permission != null) perm = permission.getName();
-        VillagerTemptGoal goal = new VillagerTemptGoal(nmsVil,speed, Ingredient.ofStacks(nmsStackList),checkPermission,perm);
-        if(update){
-            nmsVil.goalSelector.removeGoal(goal);
+        for(ItemStack item : temptItems){
+            nmsMaterialList.add(CraftItemStack.asNMSCopy(item).getItem());
         }
-        nmsVil.goalSelector.addGoal(1,goal);
+        VillagerFollowEmeraldGoal newGoal = new VillagerFollowEmeraldGoal(nmsVil,speed,10,nmsMaterialList,checkPermission,permission==null ? null : permission.getName());
+        VillagerTemptGoal oldGoal = new VillagerTemptGoal(nmsVil,speed, Ingredient.ofStacks(nmsStackList),checkPermission,permission==null ? null : permission.getName());
+        if(update){
+            nmsVil.goalSelector.removeGoal(oldGoal);
+            nmsVil.goalSelector.removeGoal(newGoal);
+        }
+        nmsVil.goalSelector.addGoal(3,newGoal);
     }
 
 
@@ -454,6 +456,18 @@ public class NMSHandler extends AbstractNMSHandler {
     public void triggerGameEvent(Player player, GameEvent gameEvent, Location location) {
         ServerLevel level = ((CraftWorld)location.getWorld()).getHandle();
         level.gameEvent(((CraftPlayer)player).getHandle(),CraftRegistry.bukkitToMinecraftHolder(gameEvent,Registries.GAME_EVENT),new BlockPos(location.getBlockX(),location.getBlockY(),location.getBlockZ()));
+    }
+
+    @Override
+    public boolean isPlayerJumping(Object inputObj) {
+        Input input = (Input) inputObj;
+        return input.jump();
+    }
+
+    @Override
+    public boolean isPlayerHoldingShift(Object inputObj) {
+        Input input = (Input) inputObj;
+        return input.shift();
     }
 
     private static class FleePathFinder<T extends net.minecraft.world.entity.LivingEntity> extends AvoidEntityGoal<T> {

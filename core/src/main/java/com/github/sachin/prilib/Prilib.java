@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,6 +19,8 @@ public final class Prilib {
 
 
     private AbstractNMSHandler nmsHandler;
+
+    private Map<McVersion, String> versionMap = new HashMap<>();
 
     private JavaPlugin plugin;
 
@@ -31,6 +35,16 @@ public final class Prilib {
 
 
     public void initialize(){
+        versionMap.put(new McVersion(1, 19), "v1_19_R1");
+        versionMap.put(new McVersion(1, 19, 1), "v1_19_R11");
+        versionMap.put(new McVersion(1, 19, 2), "v1_19_R11");
+        versionMap.put(new McVersion(1, 20, 6), "v1_20_5");
+        versionMap.put(new McVersion(1, 21), "v1_21");
+        versionMap.put(new McVersion(1, 21, 1), "v1_21");
+        versionMap.put(new McVersion(1, 21, 3), "v1_21_3");
+        versionMap.put(new McVersion(1, 21, 4), "v1_21_4");
+        versionMap.put(new McVersion(1, 21, 5), "v1_21_5");
+        versionMap.put(new McVersion(1, 21, 6), "v1_21_6");
         this.isNMSEnabled = loadVersions(plugin, bukkitVersion,mcVersion);
         log("Running "+mcVersion+" minecraft version");
     }
@@ -52,24 +66,11 @@ public final class Prilib {
 
     private boolean loadVersions(JavaPlugin plugin, String bukkitVersion,McVersion mcVersion){
         String packageName = bukkitVersion;
-
-        if(mcVersion.equals(new McVersion(1,19))){
-            packageName = "v1_19_R1";
+        if (!versionMap.containsKey(mcVersion) && mcVersion.isAtLeast(1, 21, 7)) {
+            packageName = "v1_21_6";
         }
-        else if(mcVersion.equals(new McVersion(1,19,1)) || mcVersion.equals(new McVersion(1,19,2))){
-            packageName = "v1_19_R11";
-        }
-        else if(mcVersion.equals(new McVersion(1,20,6))){
-            packageName = "v1_20_5";
-        }
-        else if(mcVersion.equals(new McVersion(1,21)) || mcVersion.equals(new McVersion(1,21,1))){
-            packageName = "v1_21";
-        }
-        else if(mcVersion.equals(new McVersion(1,21,3))){
-            packageName = "v1_21_3";
-        }
-        else if(mcVersion.isAtLeast(1,21,4)){
-            packageName = "v1_21_4";
+        if(versionMap.containsKey(mcVersion)){
+            packageName = versionMap.get(mcVersion);
         }
         try {
             //abstractNmsHandler = (AbstractNMSHandler) Class.forName(packageName + ".internal.nms." + internalsName + ".NMSHandler").newInstance();
