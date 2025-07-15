@@ -233,8 +233,11 @@ public class NMSHandler extends AbstractNMSHandler {
     public Object getElytraUpdatePacket(Object handle, Entity itemFrame, NamespacedKey key) {
 
         ClientboundSetEntityDataPacket nmsPacket = (ClientboundSetEntityDataPacket) handle;
+        NamespacedKey itemIdKey = new NamespacedKey("lootin","item-frame-elytra-key");
         for(SynchedEntityData.DataValue<?> item : nmsPacket.packedItems()){
             if(itemFrame.getPersistentDataContainer().has(key, PersistentDataType.INTEGER)){
+                int id = itemFrame.getPersistentDataContainer().get(itemIdKey,PersistentDataType.INTEGER);
+                if(id!=item.id()) continue;
                 List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
                 SynchedEntityData.DataValue<net.minecraft.world.item.ItemStack> newItem = new SynchedEntityData.DataValue<net.minecraft.world.item.ItemStack>(item.id(), ItemFrame.DATA_ITEM.serializer(),CraftItemStack.asNMSCopy(new ItemStack(Material.AIR)));
                 list.add(newItem);
@@ -439,8 +442,7 @@ public class NMSHandler extends AbstractNMSHandler {
     @Override
     public void triggerGameEvent(Player player, GameEvent gameEvent, Location location) {
         ServerLevel level = ((CraftWorld)location.getWorld()).getHandle();
-
-        level.gameEvent(((CraftPlayer)player).getHandle(),CraftRegistry.bukkitToMinecraftHolder(gameEvent,Registries.GAME_EVENT),new BlockPos(location.getBlockX(),location.getBlockY(),location.getBlockZ()));
+//        level.gameEvent(((CraftPlayer)player).getHandle(),CraftRegistry.bukkitToMinecraftHolder(gameEvent,Registries.GAME_EVENT),new BlockPos(location.getBlockX(),location.getBlockY(),location.getBlockZ()));
     }
 
     @Override
